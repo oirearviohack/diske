@@ -1,7 +1,11 @@
 <?php
 include('diske_hfir_class.php');
+include_once('../oirearvio_api.php');
+@session_start();
 echo '<html>';
   echo '<body>';
+
+@session_destroy();
 ?>
 
 <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
@@ -68,6 +72,9 @@ body {
   padding: 1em;
 	text-align: left;
   line-height: 1.5em;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  height: 460px;
 }
 
 .talktext p {
@@ -190,9 +197,11 @@ echo '<div class="talk-bubble tri-right left-in shadow">';
   echo '<div class="talktext">';
     if (!isset($_GET['unlink'])) {
       $p = fb_hfir::getPatient($uid); // potilaan tiedot id:llä
-      $greeting = '<b>Hi, '.$p['name'][0]['given'][0].' '.$p['name'][0]['family'].'!</b> I found that you had xx . Does this symptom still occure?';
+      $symptom = 'chest pain';
+      $greeting = '<b>Hi, '.$p['name'][0]['given'][0].' '.$p['name'][0]['family'].'!</b> I found that you had chest pain at 4.5.2017. Does this symptom still occure?';
       echo '<span id="greet">'.$greeting.'</span>';
       echo '<span id="introtext"><p>&nbsp;</p></span>';
+      echo '<input id="oire" type="hidden" value="'.$symptom.'"/>';
       echo '<div data-answer="repo_yes" class="s_item yes">Yes</div>';
       echo '<div data-answer="repo_no" class="s_item no">No</div>';
       //echo '<div class="yesno"><span data-answer="yes" class="yes">YES</span> | <span data-answer="no" class="no">NO</span></div>';
@@ -200,6 +209,7 @@ echo '<div class="talk-bubble tri-right left-in shadow">';
       $greeting = '<b>Hi, stranger!</b> Do you have any symptoms?';
       echo '<span id="greet">'.$greeting.'</span>';
       echo '<span id="introtext"><p>&nbsp;</p></span>';
+      echo '<input id="oire" type="hidden" value="'.$symptom.'"/>';
       echo '<div data-answer="init_yes" class="s_item yes">Yes</div>';
       echo '<div data-answer="init_no" class="s_item no">No</div>';
       //echo '<div class="yesno"><span data-answer="yes" class="yes">YES</span> | <span data-answer="no" class="no">NO</span></div>';
@@ -209,10 +219,10 @@ echo '<div class="talk-bubble tri-right left-in shadow">';
 
   echo '</div>';
   echo '</div>';
-echo '<div class="debug-bubble shadow">';
+/*echo '<div class="debug-bubble shadow">';
   echo 'DEBUG DATA';
   echo '<div id="debuggi" style="font-size:10px; position: relative; top: 10px;"></div>';
-echo '</div>';
+echo '</div>'; */
 
 
 
@@ -250,17 +260,41 @@ $tstamp = date('G.i', time());
 
 <?php } ?>
 
+$(document).on('click', '.intsmp', function(e) {
+  e.preventDefault;
+  var id = $(this).data('id');
+  var symptom = $(this).data('symptom');
+  var helper = 'addition_yes';
+  $.ajax({
+  type: 'POST',
+    url: 'oirearvio_ajax.php',
+    cache: false,
+    data: { 'state' : 's_item', 'helper' : helper , 'symptom' : symptom, 'id' : id },
+    success: function(html) {
+      $('.talktext').empty();
+      $('.talktext').prepend(html);
+    }
+  })
+});
+
 $(document).on('click', '.s_item', function() {
   var helper = $(this).data('answer');
-
+  var symptom = '';
   if (helper == 'start_over') {
     $(location).attr('href','http://www.fudbot.com/oda/?unlink');
   } else {
+    if (helper == 'addition_yes') {
+      var id = $(this).data('id');
+      //alert(id);
+    } else {
+      var id = '';
+    }
+    //alert(helper);
     $.ajax({
     type: 'POST',
       url: 'oirearvio_ajax.php',
       cache: false,
-      data: { 'state' : 's_item', 'helper' : helper },
+      data: { 'state' : 's_item', 'helper' : helper , 'symptom' : symptom, 'id' : id },
       success: function(html) {
         $('.talktext').empty();
         $('.talktext').prepend(html);
