@@ -35,6 +35,7 @@ body {
 	height: 500px;
 	background-color: #ecf0f1;
   border-radius: 2px;
+  
 }
 
 .debug-bubble {

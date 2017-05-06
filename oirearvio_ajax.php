@@ -32,20 +32,21 @@ if ($_POST['state'] == 's_item') {
 
       echo 'Alright. Do you have any of these symptoms?';
       echo '<span id="introtext"><p>&nbsp;</p></span>';
+      echo '<div data-answer="addition_no" class="s_item">No</div>';
       if (count($_SESSION['oire']->diseases) > 3) {
         foreach ($_SESSION['oire']->symptomsuggestions as $k => $v) {
           echo '<div class="s_item" data-answer="addition_yes" data-id="'.$v['id'].'">'.$v['name'].'</div>';
         }
-        echo '<div data-answer="addition_no" class="s_item">No</div>';
+
       } else {
         foreach ($_SESSION['oire']->diseases as $k => $v) {
-          echo 'Possible diagnoses(s): ';
+
           foreach ($v as $k2 => $v2) {
             if ($k2 == 'name') {
               $_d .= $v2.', ';
             }
           }
-          echo substr($_d, 0, -2);
+          echo 'Possible diagnoses(s): '; echo substr($_d, 0, -2);
           echo '<span id="introtext"><p>&nbsp;</p></span>';
           echo '<div data-answer="addition_no" class="s_item">Create careplan</div>';
         }
@@ -55,15 +56,16 @@ if ($_POST['state'] == 's_item') {
     } else if ($_POST['helper'] == 'addition_no') {
 
       foreach ($_SESSION['oire']->diseases as $k => $v) {
-        echo 'Possible diagnoses(s): ';
+
         foreach ($v as $k2 => $v2) {
           if ($k2 == 'name') {
             $_d .= $v2.', ';
           }
         }
-        echo substr($_d, 0, -2);
+
       }
-      fb_hfir::createCareplan(2521, 'Possible diagnose(s) are '.$_d.'. Contact your local healthcare station for scheduling an appoitment.');
+      echo 'Possible diagnoses(s): '; echo substr($_d, 0, -2);
+      fb_hfir::createCareplan(2521, 'Possible diagnose(s) are '.$_d.'. Contact your local healthcare station for scheduling an appoitment. ');
       echo '<br /><br />Careplan created.';
       echo '<span id="introtext"><p>&nbsp;</p></span>';
       echo '<div data-answer="start_over" class="s_item">Start over</div>';
