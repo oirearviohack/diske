@@ -184,6 +184,58 @@ body {
   overflow-y: auto;
 }
 
+.tt-query, /* UPDATE: newer versions use tt-input instead of tt-query */
+.tt-hint {
+    width: 290px;
+    height: 30px;
+    padding: 8px 12px;
+    font-size: 24px;
+    line-height: 30px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+}
+
+.tt-query { /* UPDATE: newer versions use tt-input instead of tt-query */
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+.tt-hint {
+    color: #999;
+}
+
+.tt-menu { /* UPDATE: newer versions use tt-menu instead of tt-dropdown-menu */
+    width: 290px;
+    margin-top: 12px;
+    padding: 8px 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    box-shadow: 0 5px 10px rgba(0,0,0,.2);
+}
+
+.tt-selectable:hover {
+  cursor: pointer;
+  background-color: #ace;
+}
+
+.tt-suggestion {
+    padding: 3px 20px;
+    font-size: 18px;
+    line-height: 24px;
+}
+
+.tt-suggestion.tt-is-under-cursor { /* UPDATE: newer versions use .tt-suggestion.tt-cursor */
+    color: #fff;
+    background-color: #0097cf;
+
+}
+
+.tt-suggestion p {
+    margin: 0;
+}
+
 </style>
 
 <?php
@@ -209,7 +261,7 @@ echo '<div class="talk-bubble tri-right left-in shadow">';
       $greeting = '<b>Hi, stranger!</b> Do you have any symptoms?';
       echo '<span id="greet">'.$greeting.'</span>';
       echo '<span id="introtext"><p>&nbsp;</p></span>';
-      echo '<input id="oire" type="hidden" value="'.$symptom.'"/>';
+      //echo '<input id="oire" type="hidden" value="'.$symptom.'"/>';
       echo '<div data-answer="init_yes" class="s_item yes">Yes</div>';
       echo '<div data-answer="init_no" class="s_item no">No</div>';
       //echo '<div class="yesno"><span data-answer="yes" class="yes">YES</span> | <span data-answer="no" class="no">NO</span></div>';
@@ -263,7 +315,7 @@ $tstamp = date('G.i', time());
 $(document).on('click', '.intsmp', function(e) {
   e.preventDefault;
   var id = $(this).data('id');
-  var symptom = $(this).data('symptom');
+  var symptom = '';
   var helper = 'addition_yes';
   $.ajax({
   type: 'POST',

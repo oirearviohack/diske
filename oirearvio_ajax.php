@@ -25,8 +25,8 @@ if ($_POST['state'] == 's_item') {
     } else if ($_POST['helper'] == 'repo_yes' || $_POST['helper'] == 'addition_yes') {
       $symptom = $_POST['symptom'];
       $id = $_POST['id'];
-      if (isset($_POST['symptom'])) {
-        $id = '137'; 
+      if (!empty($_POST['symptom'])) {
+        $id = '137';
       }
       $_SESSION['oire']->registerOire($id);
 
