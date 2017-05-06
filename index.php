@@ -35,7 +35,7 @@ body {
 	height: 500px;
 	background-color: #ecf0f1;
   border-radius: 2px;
-  
+
 }
 
 .debug-bubble {
@@ -332,7 +332,10 @@ $(document).on('click', '.intsmp', function(e) {
 
 $(document).on('click', '.s_item', function() {
   var helper = $(this).data('answer');
-  var symptom = '';
+  var symptom = $('#oire').val();
+  if (symptom == '') {
+    var symptom = '';
+  }
   if (helper == 'start_over') {
     $(location).attr('href','http://www.fudbot.com/oda/?unlink');
   } else {
