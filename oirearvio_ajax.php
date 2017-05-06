@@ -30,10 +30,14 @@ if ($_POST['state'] == 's_item') {
       }
       $_SESSION['oire']->registerOire($id);
 
-      echo 'Alright. Do you have any of these symptoms?';
-      echo '<span id="introtext"><p>&nbsp;</p></span>';
-      echo '<div data-answer="addition_no" class="s_item">No</div>';
+
+
       if (count($_SESSION['oire']->diseases) > 3) {
+        echo 'Alright. Do you have any of these symptoms?';
+        $_cd = count($_SESSION['oire']->diseases);
+        echo '<span id="introtext"><p>&nbsp;</p></span>';
+        echo '<div data-answer="addition_no" class="s_item">No</div>';
+        echo '<div style="position: absolute; top:2px; right: 5px; font-size: 12px; color: #7f8c8d;">'.$_cd.'</div>';
         foreach ($_SESSION['oire']->symptomsuggestions as $k => $v) {
           echo '<div class="s_item" data-answer="addition_yes" data-id="'.$v['id'].'">'.$v['name'].'</div>';
         }
